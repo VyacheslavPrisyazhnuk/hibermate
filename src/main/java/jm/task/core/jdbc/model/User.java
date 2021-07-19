@@ -18,8 +18,9 @@ public class User {
     @Column
     private Byte age;
 
-    public User(int anInt, String string, String resultSetString, int resultSetInt) {
-
+    public User(Long anInt, String string, String resultSetString, int resultSetInt) {
+        this(string, resultSetString, (byte) resultSetInt);
+        this.id = anInt;
     }
 
     public User(String name, String lastName, Byte age) {

@@ -1,6 +1,8 @@
+
 import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.service.UserService;
 import jm.task.core.jdbc.service.UserServiceImpl;
+
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -50,8 +52,10 @@ public class UserServiceTest {
                 Assert.fail("User был некорректно добавлен в базу данных");
             }
 
-        } catch (Exception e) {
-            Assert.fail("Во время тестирования сохранения пользователя произошло исключение\n" + e);
+       } catch (Exception e) {
+           Assert.fail("Во время тестирования сохранения пользователя произошло исключение\n" + e);
+        } finally {
+
         }
     }
 
