@@ -19,8 +19,7 @@ public class User {
     private Byte age;
 
     public User(Long anInt, String string, String resultSetString, int resultSetInt) {
-        this(string, resultSetString, (byte) resultSetInt);
-        this.id = anInt;
+
     }
 
     public User(String name, String lastName, Byte age) {

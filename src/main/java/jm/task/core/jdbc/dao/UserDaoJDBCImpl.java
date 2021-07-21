@@ -3,10 +3,8 @@ package jm.task.core.jdbc.dao;
 
 import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.util.Util;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,73 +16,157 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void createUsersTable() {
-        ResultSet tables;
-        try (Connection connection = util.getConnection();
-            Statement statement = connection.createStatement()) {
-            tables = connection.getMetaData().getTables(null, null, "mytable", null);
-            if (!tables.next()) {
-                String sqlCommand = "CREATE TABLE mytable (Id INT PRIMARY KEY AUTO_INCREMENT, Name VARCHAR(20), lastName VARCHAR(20), age INT)";
-                statement.executeUpdate(sqlCommand);
-            }
+        Connection connection = null;
+        Statement statement = null;
+        try {
+            connection = util.getConnection();
+            statement = connection.createStatement();
+                statement.executeUpdate("CREATE TABLE IF NOT EXISTS mytable (Id INT PRIMARY KEY AUTO_INCREMENT, Name VARCHAR(20), lastName VARCHAR(20), age INT)");
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+        } finally {
+            try {
+                connection.commit();
+            } catch (SQLException throwables) {
+                System.out.println("при попытке коммита произошла ошибка");
+            }
+            try {
+                statement.close();
+                connection.close();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
         }
     }
+}
     public void dropUsersTable() {
-        ResultSet tables;
-        try (Connection connection = util.getConnection();
-            Statement statement = connection.createStatement()) {
-            tables = connection.getMetaData().getTables(null, null, "mytable", null);
-            if (tables.next()) {
-                statement.executeUpdate("DROP TABLE mytable");
-            }
+        Connection connection = null;
+        Statement statement = null;
+        try {
+            connection = util.getConnection();
+            statement = connection.createStatement();
+            statement.executeUpdate("DROP TABLE IF EXISTS mytable");
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+        } finally {
+            try {
+                connection.commit();
+            } catch (SQLException throwables) {
+                System.out.println("при попытке коммита произошла ошибка");
+            }
+            try {
+                statement.close();
+                connection.close();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
         }
     }
     public void saveUser(String name, String lastName, byte age) {
-        try (Connection connection = util.getConnection();
-            Statement statement = connection.createStatement()) {
-            statement.execute("INSERT INTO mytable (Name , lastName, age) VALUE ('" + name + "','" + lastName + "', '" + age + "')");
-            System.out.printf("User с именем – %s добавлен в базу данных \n", name);
+        Connection connection = null;
+        PreparedStatement prStatement = null;
+        try {
+            connection = util.getConnection();
+            prStatement = connection.prepareStatement("INSERT INTO mytable (Name , lastName, age) VALUES (?,?,?)");
+            prStatement.setString(1, name);
+            prStatement.setString(2, lastName);
+            prStatement.setByte(3, age);
+            prStatement.executeUpdate();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+        } finally {
+            try {
+                connection.commit();
+            } catch (SQLException throwables) {
+                System.out.println("при попытке коммита произошла ошибка");
+            }
+            try {
+                prStatement.close();
+                connection.close();
+
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
         }
     }
     public void removeUserById(long id) {
-        try (Connection connection = util.getConnection();
-            Statement statement = connection.createStatement()) {
-            statement.execute("delete from mytable where id = '" + (int) id + "'");
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
+        Connection connection = null;
+        PreparedStatement prStatement = null;
+        try {
+            connection = util.getConnection();
+            prStatement = connection.prepareStatement("delete from mytable where id = (int) id");
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            } finally {
+                try {
+                    connection.commit();
+                } catch (SQLException throwables) {
+                    System.out.println("при попытке коммита произошла ошибка");
+                }
+                try {
+                    prStatement.close();
+                    connection.close();
+
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+            }
     }
     public List<User> getAllUsers() {
         String query = "SELECT * FROM mytable";
         List<User> userList = new ArrayList<>();
         ResultSet tables;
-        try (Connection connection = util.getConnection();
-            Statement statement = connection.createStatement()) {
+        Connection connection = null;
+        Statement statement = null;
+        try {
+            connection = util.getConnection();
+            statement = connection.createStatement();
             tables = connection.getMetaData().getTables(null, null, "mytable", null);
             if (tables.next()) {
                 ResultSet resultSet = statement.executeQuery(query);
                 while (resultSet.next()) {
-                    User user = new User(resultSet.getLong("Id"), resultSet.getString("name"), resultSet.getString("lastName"), resultSet.getByte("age"));
+                    User user = new User(resultSet.getString("name"), resultSet.getString("lastName"), resultSet.getByte("age"));
                     userList.add(user);
                 }
                 System.out.println(userList);
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+        } finally {
+            try {
+                connection.commit();
+            } catch (SQLException throwables) {
+                System.out.println("при попытке коммита произошла ошибка");
+            }
+            try {
+                statement.close();
+                connection.close();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
         }
         return userList;
     }
     public void cleanUsersTable() {
-        try (Connection connection = util.getConnection();
-             Statement statement = connection.createStatement()) {
+        Connection connection = null;
+        Statement statement = null;
+        try {
+            connection = util.getConnection();
+            statement = connection.createStatement();
             statement.execute("TRUNCATE TABLE mytable");
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+        } finally {
+            try {
+                connection.commit();
+            } catch (SQLException throwables) {
+                System.out.println("при попытке коммита произошла ошибка");
+            }
+            try {
+                statement.close();
+                connection.close();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
         }
     }
 }
