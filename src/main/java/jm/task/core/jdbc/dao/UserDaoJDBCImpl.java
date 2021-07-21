@@ -29,6 +29,12 @@ public class UserDaoJDBCImpl implements UserDao {
                 connection.commit();
             } catch (SQLException throwables) {
                 System.out.println("при попытке коммита произошла ошибка");
+                try {
+                    connection.rollback();
+                    System.out.println("произошел ролбек");
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
             try {
                 statement.close();
@@ -52,6 +58,12 @@ public class UserDaoJDBCImpl implements UserDao {
                 connection.commit();
             } catch (SQLException throwables) {
                 System.out.println("при попытке коммита произошла ошибка");
+                try {
+                    connection.rollback();
+                    System.out.println("произошел ролбек");
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
             try {
                 statement.close();
@@ -78,6 +90,12 @@ public class UserDaoJDBCImpl implements UserDao {
                 connection.commit();
             } catch (SQLException throwables) {
                 System.out.println("при попытке коммита произошла ошибка");
+                try {
+                    connection.rollback();
+                    System.out.println("произошел ролбек");
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
             try {
                 prStatement.close();
@@ -101,6 +119,12 @@ public class UserDaoJDBCImpl implements UserDao {
                     connection.commit();
                 } catch (SQLException throwables) {
                     System.out.println("при попытке коммита произошла ошибка");
+                    try {
+                        connection.rollback();
+                        System.out.println("произошел ролбек");
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
                 }
                 try {
                     prStatement.close();
@@ -136,6 +160,12 @@ public class UserDaoJDBCImpl implements UserDao {
                 connection.commit();
             } catch (SQLException throwables) {
                 System.out.println("при попытке коммита произошла ошибка");
+                try {
+                    connection.rollback();
+                    System.out.println("произошел ролбек");
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
             try {
                 statement.close();
@@ -160,6 +190,12 @@ public class UserDaoJDBCImpl implements UserDao {
                 connection.commit();
             } catch (SQLException throwables) {
                 System.out.println("при попытке коммита произошла ошибка");
+                try {
+                    connection.rollback();
+                    System.out.println("произошел ролбек");
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
             try {
                 statement.close();
