@@ -9,7 +9,6 @@ import jm.task.core.jdbc.dao.UserDaoJDBCImpl;
 
 public class Main {
     public static void main(String[] args) {
-
         UserDao userDao = new UserDaoJDBCImpl();
         userDao.createUsersTable();
         userDao.saveUser("Ivanic", "Ivanov", (byte) 5);
@@ -19,7 +18,6 @@ public class Main {
         userDao.getAllUsers();
         userDao.cleanUsersTable();
         userDao.dropUsersTable();
-
     }
-    }
+}
 

@@ -1,20 +1,17 @@
 package jm.task.core.jdbc.util;
-
-
 import java.sql.*;
-
 public class Util {
-    private static String URL;
-    private static String USERNAME;
-    private static String PASSWORD;
+    private static final String URL;
+    private static final String USERNAME;
+    private static final String PASSWORD;
 
     static {
         URL = "jdbc:mysql://localhost:3306/mydpc?useSSL=false";
         USERNAME = "root";
         PASSWORD = "glory1357";
-
     }
-
+    public Util() {
+    }
     public Connection getConnection() {
         Connection connection = null;
         try {
@@ -23,8 +20,6 @@ public class Util {
             throwables.printStackTrace();
         }
         return connection;
-    }
-    public Util() {
     }
 }
 
