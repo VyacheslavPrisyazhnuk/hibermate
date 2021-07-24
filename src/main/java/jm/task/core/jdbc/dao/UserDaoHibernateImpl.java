@@ -5,6 +5,8 @@ import jm.task.core.jdbc.util.Util;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
+
 import java.util.List;
 
 public class UserDaoHibernateImpl implements UserDao {
@@ -63,21 +65,22 @@ public class UserDaoHibernateImpl implements UserDao {
         Session session = Util.getSessionFactory().openSession();
         Transaction tx = session.beginTransaction();
         List <User> list;
-        list = session.createCriteria(User.class).list();
-        for (User item: list) {
-            System.out.println(item);
-        }
+        String hql = "FROM User";
+        Query query = session.createQuery(hql);
+        List<User> users = query.list();
         tx.commit();
         session.close();
-            return list;
+            return users;
         }
     @Override
     public void cleanUsersTable() {
         Session session = Util.getSessionFactory().openSession();
         Transaction tx = session.beginTransaction();
-        final List<User> list = session.createCriteria(User.class).list();
-        if(list.size() > 0) {
-            for (User obj : list) {
+        String hql = "FROM User";
+        Query query = session.createQuery(hql);
+        List<User> users = query.list();
+        if(users.size() > 0) {
+            for (User obj : users) {
                 session.delete(obj);
             }
         }
