@@ -21,29 +21,25 @@ public class UserDaoJDBCImpl implements UserDao {
         try {
             connection = util.getConnection();
             statement = connection.createStatement();
-                statement.executeUpdate("CREATE TABLE IF NOT EXISTS mytable (Id INT PRIMARY KEY AUTO_INCREMENT, Name VARCHAR(20), lastName VARCHAR(20), age INT)");
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS mytable (Id INT PRIMARY KEY AUTO_INCREMENT, Name VARCHAR(20), lastName VARCHAR(20), age TINYINT)");
+            connection.commit();
         } catch (SQLException throwables) {
+            try {
+                connection.rollback();
+                System.out.println("произошел ролбек");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
             throwables.printStackTrace();
         } finally {
-            try {
-                connection.commit();
-            } catch (SQLException throwables) {
-                System.out.println("при попытке коммита произошла ошибка");
-                try {
-                    connection.rollback();
-                    System.out.println("произошел ролбек");
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
             try {
                 statement.close();
                 connection.close();
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
+            }
         }
     }
-}
     public void dropUsersTable() {
         Connection connection = null;
         Statement statement = null;
@@ -51,20 +47,16 @@ public class UserDaoJDBCImpl implements UserDao {
             connection = util.getConnection();
             statement = connection.createStatement();
             statement.executeUpdate("DROP TABLE IF EXISTS mytable");
+            connection.commit();
         } catch (SQLException throwables) {
+            try {
+                connection.rollback();
+                System.out.println("произошел ролбек");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
             throwables.printStackTrace();
         } finally {
-            try {
-                connection.commit();
-            } catch (SQLException throwables) {
-                System.out.println("при попытке коммита произошла ошибка");
-                try {
-                    connection.rollback();
-                    System.out.println("произошел ролбек");
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
             try {
                 statement.close();
                 connection.close();
@@ -83,24 +75,19 @@ public class UserDaoJDBCImpl implements UserDao {
             prStatement.setString(2, lastName);
             prStatement.setByte(3, age);
             prStatement.executeUpdate();
+            connection.commit();
         } catch (SQLException throwables) {
+            try {
+                connection.rollback();
+                System.out.println("произошел ролбек");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
             throwables.printStackTrace();
         } finally {
             try {
-                connection.commit();
-            } catch (SQLException throwables) {
-                System.out.println("при попытке коммита произошла ошибка");
-                try {
-                    connection.rollback();
-                    System.out.println("произошел ролбек");
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-            try {
                 prStatement.close();
                 connection.close();
-
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
             }
@@ -111,29 +98,25 @@ public class UserDaoJDBCImpl implements UserDao {
         PreparedStatement prStatement = null;
         try {
             connection = util.getConnection();
-            prStatement = connection.prepareStatement("delete from mytable where id = (int) id");
+            prStatement = connection.prepareStatement("delete from mytable where id = "+id+"");
+            prStatement.executeUpdate();
+            connection.commit();
+        } catch (SQLException throwables) {
+            try {
+                connection.rollback();
+                System.out.println("произошел ролбек");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            throwables.printStackTrace();
+        } finally {
+            try {
+                prStatement.close();
+                connection.close();
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
-            } finally {
-                try {
-                    connection.commit();
-                } catch (SQLException throwables) {
-                    System.out.println("при попытке коммита произошла ошибка");
-                    try {
-                        connection.rollback();
-                        System.out.println("произошел ролбек");
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
-                }
-                try {
-                    prStatement.close();
-                    connection.close();
-
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
-                }
             }
+        }
     }
     public List<User> getAllUsers() {
         String query = "SELECT * FROM mytable";
@@ -153,20 +136,16 @@ public class UserDaoJDBCImpl implements UserDao {
                 }
                 System.out.println(userList);
             }
+            connection.commit();
         } catch (SQLException throwables) {
+            try {
+                connection.rollback();
+                System.out.println("произошел ролбек");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
             throwables.printStackTrace();
         } finally {
-            try {
-                connection.commit();
-            } catch (SQLException throwables) {
-                System.out.println("при попытке коммита произошла ошибка");
-                try {
-                    connection.rollback();
-                    System.out.println("произошел ролбек");
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
             try {
                 statement.close();
                 connection.close();
@@ -183,20 +162,16 @@ public class UserDaoJDBCImpl implements UserDao {
             connection = util.getConnection();
             statement = connection.createStatement();
             statement.execute("TRUNCATE TABLE mytable");
+            connection.commit();
         } catch (SQLException throwables) {
+            try {
+                connection.rollback();
+                System.out.println("произошел ролбек");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
             throwables.printStackTrace();
         } finally {
-            try {
-                connection.commit();
-            } catch (SQLException throwables) {
-                System.out.println("при попытке коммита произошла ошибка");
-                try {
-                    connection.rollback();
-                    System.out.println("произошел ролбек");
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
             try {
                 statement.close();
                 connection.close();
