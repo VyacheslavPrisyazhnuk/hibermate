@@ -18,15 +18,20 @@ public class UserDaoHibernateImpl implements UserDao {
         try {
             session = Util.getSessionFactory().openSession();
             tx = session.beginTransaction();
-            session.createSQLQuery("CREATE TABLE IF NOT EXISTS users (Id INT PRIMARY KEY AUTO_INCREMENT, Name VARCHAR(20), lastName VARCHAR(20), age INT)")
+            session.createSQLQuery("CREATE TABLE IF NOT EXISTS users (Id BIGINT PRIMARY KEY AUTO_INCREMENT, Name VARCHAR(20), lastName VARCHAR(20), age TINYINT)")
                     .addEntity(User.class)
                     .executeUpdate();
             tx.commit();
         } catch (Exception e) {
             if (tx != null) {
-                tx.rollback();
+               try {
+                   tx.rollback();
+                   System.out.println("ролбэк");
+               } catch (Exception r) {
+                   r.printStackTrace();
+               }
             }
-            System.out.println("ролбэк");
+
         } finally {
             if (session != null) {
                 session.close();
@@ -46,9 +51,13 @@ public class UserDaoHibernateImpl implements UserDao {
             tx.commit();
         } catch (Exception e) {
             if (tx != null) {
-                tx.rollback();
+                try {
+                    tx.rollback();
+                    System.out.println("ролбэк");
+                } catch (Exception r) {
+                    r.printStackTrace();
+                }
             }
-            System.out.println("ролбэк");
         } finally {
             if (session != null) {
                 session.close();
@@ -73,9 +82,13 @@ public class UserDaoHibernateImpl implements UserDao {
 
         } catch (Exception e) {
             if (tx != null) {
-                tx.rollback();
+                try {
+                    tx.rollback();
+                    System.out.println("ролбэк");
+                } catch (Exception r) {
+                    r.printStackTrace();
+                }
             }
-            System.out.println(e.getMessage());
         } finally {
             if (session != null) {
                 session.close();
@@ -96,9 +109,13 @@ public class UserDaoHibernateImpl implements UserDao {
             System.out.println("нет пользователя с таким ID");
         } catch (Exception e) {
             if (tx != null) {
-                tx.rollback();
+                try {
+                    tx.rollback();
+                    System.out.println("ролбэк");
+                } catch (Exception r) {
+                    r.printStackTrace();
+                }
             }
-            System.out.println(e.getMessage());
         } finally {
             if (session != null) {
                 session.close();
@@ -118,9 +135,13 @@ public class UserDaoHibernateImpl implements UserDao {
             tx.commit();
         } catch (Exception e) {
             if (tx != null) {
-                tx.rollback();
+                try {
+                    tx.rollback();
+                    System.out.println("ролбэк");
+                } catch (Exception r) {
+                    r.printStackTrace();
+                }
             }
-            System.out.println(e.getMessage());
         } finally {
             if (session != null) {
                 session.close();
@@ -135,18 +156,17 @@ public class UserDaoHibernateImpl implements UserDao {
         try {
             session = Util.getSessionFactory().openSession();
             tx = session.beginTransaction();
-            List<User> users = session.createQuery("FROM User").list();
-            if (users.size() > 0) {
-                for (User obj : users) {
-                    session.delete(obj);
-                }
-            }
+            session.createQuery("delete FROM User").executeUpdate();
             tx.commit();
         } catch (Exception e) {
             if (tx != null) {
-                tx.rollback();
+                try {
+                    tx.rollback();
+                    System.out.println("ролбэк");
+                } catch (Exception r) {
+                    r.printStackTrace();
+                }
             }
-            System.out.println(e.getMessage());
         } finally {
             if (session != null) {
                 session.close();
